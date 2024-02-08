@@ -8,12 +8,10 @@ import { displayedRecords, getNumberOfPage } from './utils/DisplayRecords';
 import searchByKeywords from './utils/SearchingKeywords';
 
 const addingMode = ref(false);
-const numberOfRows = ref(10);
+const numOfRows = ref(10);
 const currentPage = ref(1);
-const workGroup = reactive(
-  displayedRecords(groups, currentPage.value, numberOfRows.value)
-);
-const searchWords = ref('')
+const workGroup = reactive(groups);
+const searchWords = ref('');
 
 const newGroup = ref({
   section: '',
@@ -43,14 +41,14 @@ const addNewMember = () => {
   }
 };
 
-const getRows = (n) => {
-  currentPage.value = n;
-  console.log(displayedRecords(groups, currentPage.value, numberOfRows.value));
-};
+// const getRows = (n) => {
+//   currentPage.value = n;
+//   console.log(displayedRecords(groups, currentPage.value, numOfRows.value));
+// };
 
 const filterGroups = computed(() => {
-  return searchByKeywords(workGroup, searchWords.value)
-})
+  return searchByKeywords(workGroup, searchWords.value);
+});
 </script>
 
 <template>
@@ -78,7 +76,7 @@ const filterGroups = computed(() => {
         <div class="p-2">
           Set number of rows/page
           <input
-            v-model="numberOfRows"
+            v-model="numOfRows"
             type="text"
             class="border border-gray-300 w-8"
           />
@@ -215,10 +213,10 @@ const filterGroups = computed(() => {
         </div>
       </section>
       <!-- Paginate -->
-      <section v-show="!addingMode">
+      <!-- <section v-show="!addingMode">
         <div class="flex justify-center gap-2 pt-2">
           <button
-            v-for="(n, index) in getNumberOfPage(groups, numberOfRows)"
+            v-for="(n, index) in getNumberOfPage(groups, numOfRows)"
             :key="index"
             @click="getRows(n)"
             class="p-1 bg-gray-300 text-black hover:bg-blue-600 hover:text-white cursor-pointer"
@@ -227,7 +225,7 @@ const filterGroups = computed(() => {
             {{ n }}
           </button>
         </div>
-      </section>
+      </section> -->
     </main>
   </div>
 </template>

@@ -1,7 +1,7 @@
 const searchByKeywords = (data, keywords) => {
-    console.log("search")
+  console.log('search');
   const lowerCaseKeyword = keywords.toLowerCase();
-  data.filter(
+  return data.filter(
     (item) =>
       item.section.toString().includes(lowerCaseKeyword) ||
       item.groupName.includes(lowerCaseKeyword) ||
