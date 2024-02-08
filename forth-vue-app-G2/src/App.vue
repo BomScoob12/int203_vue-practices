@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref, computed } from 'vue';
+import { reactive, ref, computed, watch } from 'vue';
 import SortIcon from './components/icons/Sort.vue';
 import SearchIcon from './components/icons/SearchIcon.vue';
 import groups from '../data/groups.json';
@@ -10,7 +10,9 @@ import searchByKeywords from './utils/SearchingKeywords';
 const addingMode = ref(false);
 const numOfRows = ref(10);
 const currentPage = ref(1);
-const workGroup = reactive(groups);
+const workGroup = ref(
+  displayedRecords(groups, currentPage.value, numOfRows.value)
+);
 const searchWords = ref('');
 
 const newGroup = ref({
@@ -41,13 +43,24 @@ const addNewMember = () => {
   }
 };
 
-// const getRows = (n) => {
-//   currentPage.value = n;
-//   console.log(displayedRecords(groups, currentPage.value, numOfRows.value));
-// };
+const getRows = (n) => {
+  currentPage.value = n;
+  console.log(currentPage.value);
+};
 
 const filterGroups = computed(() => {
   return searchByKeywords(workGroup, searchWords.value);
+});
+
+//* whatching value of currentPage
+watch([currentPage, numOfRows], () => {
+  console.log('watching');
+  workGroup.value = displayedRecords(
+    groups,
+    currentPage.value,
+    numOfRows.value
+  );
+  console.log(workGroup.value);
 });
 </script>
 
@@ -213,7 +226,7 @@ const filterGroups = computed(() => {
         </div>
       </section>
       <!-- Paginate -->
-      <!-- <section v-show="!addingMode">
+      <section v-show="!addingMode">
         <div class="flex justify-center gap-2 pt-2">
           <button
             v-for="(n, index) in getNumberOfPage(groups, numOfRows)"
@@ -225,7 +238,7 @@ const filterGroups = computed(() => {
             {{ n }}
           </button>
         </div>
-      </section> -->
+      </section>
     </main>
   </div>
 </template>

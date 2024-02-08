@@ -1,6 +1,6 @@
-const displayedRecords = (data, currentPage = 1, numberOfRows) => {
+const displayedRecords = (data, currentPage = 1, numberOfRows = 10) => {
   const startIndex = (currentPage - 1) * numberOfRows;
-  const endIndex = startIndex + numberOfRows;
+  const endIndex = currentPage * numberOfRows;
   return data.slice(startIndex, endIndex);
 };
 
