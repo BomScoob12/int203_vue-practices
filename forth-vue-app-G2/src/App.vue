@@ -14,6 +14,20 @@ const workGroup = ref(
   displayedRecords(groups, currentPage.value, numOfRows.value)
 );
 const searchWords = ref('');
+const currentFontSize = ref(12);
+const player = ref('');
+const isPlaying = ref(false);
+
+const musicControl = () => {
+  console.log('Player : '+player);
+  console.log('Player.value' + player.value);
+  isPlaying.value = !isPlaying.value;
+  if (isPlaying.value) {
+    player.value.play();
+  } else {
+    player.value.pause();
+  }
+};
 
 const newGroup = ref({
   section: '',
@@ -46,25 +60,39 @@ const addNewMember = () => {
 const getRows = (n) => {
   currentPage.value = n;
   console.log(currentPage.value);
+  workGroup.value = displayedRecords(
+    groups,
+    currentPage.value,
+    numOfRows.value
+  );
 };
 
 const filterGroups = computed(() => {
   return searchByKeywords(workGroup, searchWords.value);
 });
 
-//* whatching value of currentPage
-watch([currentPage, numOfRows], () => {
-  console.log('watching');
-  workGroup.value = displayedRecords(
-    groups,
-    currentPage.value,
-    numOfRows.value
-  );
-  console.log(workGroup.value);
+// //* whatching value of currentPage
+// watch([currentPage, numOfRows], () => {
+//   console.log('watching');
+//   workGroup.value = displayedRecords(
+//     groups,
+//     currentPage.value,
+//     numOfRows.value
+//   );
+//   console.log(workGroup.value);
+// });
+
+watch(numOfRows, (newValue, oldValue) => {
+  // console.log(`new rows per page: ${newValue}`);
+  // console.log(`old rows per page: ${oldValue}`);
+  getRows(1);
 });
 </script>
 
 <template>
+  <audio controls class="hidden" ref="player">
+    <source src="./assets/rickroll.mp4" type="audio/mp4" />
+  </audio>
   <div class="w-full">
     <header>
       <section
@@ -80,6 +108,21 @@ watch([currentPage, numOfRows], () => {
     <!-- Search bar -->
     <main class="p-5">
       <div class="flex justify-between">
+        <!-- music toggle -->
+        <div>
+          <button
+          @click="musicControl">TOGGLE RICKROLL</button>
+        </div>
+        <div class="justify-end">
+          <p>Font size :</p>
+          <input
+            type="number"
+            min="12"
+            v-model="currentFontSize"
+            class="border border-gray-300 w-10"
+          />
+          <p class="prefered-font-size">SPATIAL TEXT</p>
+        </div>
         <div
           @click="addingMode = true"
           class="font-bold italic text-blue-500 hover:text-blue-800 cursor-pointer"
@@ -90,7 +133,8 @@ watch([currentPage, numOfRows], () => {
           Set number of rows/page
           <input
             v-model="numOfRows"
-            type="text"
+            min="1"
+            type="number"
             class="border border-gray-300 w-8"
           />
         </div>
@@ -223,6 +267,8 @@ watch([currentPage, numOfRows], () => {
               {{ `${studentId}  ${studentName}` }}
             </li>
           </ul>
+          <!-- dynamic images with v-bind src -->
+          <img :src='imgs/groupImages/pic-`${index + 1}`.jpg' />
         </div>
       </section>
       <!-- Paginate -->
@@ -243,4 +289,8 @@ watch([currentPage, numOfRows], () => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.prefered-font-size {
+  font-size: v-bind(currentFontSize) px;
+}
+</style>
