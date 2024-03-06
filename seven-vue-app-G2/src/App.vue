@@ -1,9 +1,12 @@
 <script setup>
-import fs from 'fs';
+import BaseCard from './components/BaseCard.vue';
+import TodoList from './components/TodoList.vue';
 </script>
 
 <template>
-  <div></div>
+  <div>
+    <TodoList />
+  </div>
 </template>
 
 <style scoped></style>
