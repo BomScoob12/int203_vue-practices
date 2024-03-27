@@ -1,11 +1,13 @@
 <script setup>
-import BaseCard from './components/BaseCard.vue';
-import TodoList from './components/TodoList.vue';
+import { ref } from 'vue'
+import TodoList from './components/TodoList.vue'
+import ProductList from './components/ProductList.vue'
 </script>
 
 <template>
   <div>
-    <TodoList />
+    <!-- <TodoList /> -->
+    <ProductList />
   </div>
 </template>
 
